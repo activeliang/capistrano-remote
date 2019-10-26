@@ -36,7 +36,7 @@ namespace :remote do
   task :log do
     rails_env = fetch(:rails_env)
     on roles(:db) do |host|
-      Capistrano::Remote::Runner.new(host).rake(
+      Capistrano::Remote::Runner.new(host).shell(
         "tail -f log/production.log"
       )
     end
