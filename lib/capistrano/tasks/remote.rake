@@ -33,7 +33,7 @@ namespace :remote do
 
   desc 'Run a remote show production log.
     Specify the task to run using the `task` environment variable.'
-  task :rake do
+  task :log do
     rails_env = fetch(:rails_env)
     on roles(:db) do |host|
       Capistrano::Remote::Runner.new(host).rake(
