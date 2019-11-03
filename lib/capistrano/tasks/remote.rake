@@ -31,15 +31,17 @@ namespace :remote do
     end
   end
 
-  desc 'Run a remote show production log.
-    Specify the task to run using the `task` environment variable.'
-  task :log do
-    rails_env = fetch(:rails_env)
-    on roles(:db) do |host|
-      Capistrano::Remote::Runner.new(host).shell(
-        "tail -f log/production.log"
-      )
+  desc 'tail production log files'
+  task :tail_logs do
+    on roles(:app) do
+      trap('INT') { puts 'Interupted'; exit 0; }
+      execute "tail -f #{shared_path}/log/production.log" do |channel, stream, data|
+        puts # for an extra line break before the host name
+        puts "#{channel[:host]}: #{data}"
+        break if stream == :err
+      end
     end
   end
+  
 end
 # rubocop:enable Metrics/BlockLength
