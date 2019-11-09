@@ -31,6 +31,17 @@ namespace :remote do
     end
   end
 
+  desc 'Run a remote rake task.
+    Specify the task to run using the `task` environment variable.'
+  task :rakeeeee do
+    rails_env = fetch(:rails_env)
+    on roles(:db) do |host|
+      Capistrano::Remote::Runner.new(host).rake(
+        "RAILS_ENV=#{rails_env} #{ENV['task']}"
+      )
+    end
+  end
+
   desc 'tail production log files'
   task :tail_logs do
     on roles(:app) do
